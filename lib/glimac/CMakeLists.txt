@@ -1,0 +1,34 @@
+add_library(glimac "")
+target_link_libraries(glimac
+    PRIVATE
+        glm
+)
+target_include_directories(glimac PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+target_sources(glimac
+    PRIVATE 
+        src/Cone.cpp
+        src/Geometry.cpp
+        src/Image.cpp
+        src/Program.cpp
+        src/SDLWindowManager.cpp
+        src/Shader.cpp
+        src/Sphere.cpp
+        src/stb_image.h
+        src/tiny_obj_loader.cpp
+        src/tiny_obj_loader.h
+        src/TrackballCamera.cpp
+        include/glimac/BBox.hpp
+        include/glimac/common.hpp
+        include/glimac/Cone.hpp
+        include/glimac/FilePath.hpp
+        include/glimac/Geometry.hpp
+        include/glimac/glm.hpp
+        include/glimac/Image.hpp
+        include/glimac/Program.hpp
+        include/glimac/SDLWindowManager.hpp
+        include/glimac/Shader.hpp
+        include/glimac/Sphere.hpp
+        include/glimac/TrackballCamera.hpp
+)
