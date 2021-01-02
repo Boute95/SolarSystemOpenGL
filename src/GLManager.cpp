@@ -1,0 +1,26 @@
+#include <solar/GLManager.hpp>
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::addVertices(const std::vector<glimac::ShapeVertex>& v) {
+    vertices.insert(vertices.end(), v.begin(), v.end());
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::drawVertices(const GLint vertexCount) {
+    glDrawArrays(GL_TRIANGLES, vertexDrawStartIndex, vertexCount);
+    vertexDrawStartIndex += vertexCount;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::bind() {
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::unbind() {
+}

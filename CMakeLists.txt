@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.15)
 
 project(SolarSystemOpenGL CXX)
 
@@ -14,15 +14,27 @@ set_project_warnings(project_warnings)
 
 # Program
 add_executable(solarSystem "")
+target_compile_features(solarSystem PUBLIC cxx_std_14) # For std::make_unique
+target_include_directories(solarSystem PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
 target_sources(solarSystem
     PRIVATE
-        src/exo1.cpp
+        src/App.cpp
+        src/Engine.cpp
+        src/RenderEngine.cpp
+        src/GLManager.cpp
+        src/SolarSphereObject.cpp
+        src/Camera.cpp
+        src/Star.cpp
 )
+
 
 # Dependencies
 add_subdirectory(lib)
 target_link_libraries(solarSystem
     PRIVATE
+        project_warnings
         glm
         glimac
         SDL

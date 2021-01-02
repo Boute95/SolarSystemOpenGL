@@ -43,7 +43,7 @@
 
 add_library(glm "")
 
-target_include_directories(glm PUBLIC 
+target_include_directories(glm SYSTEM PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 

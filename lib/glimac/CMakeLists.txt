@@ -3,7 +3,7 @@ target_link_libraries(glimac
     PRIVATE
         glm
 )
-target_include_directories(glimac PUBLIC
+target_include_directories(glimac SYSTEM PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 )
 target_sources(glimac
