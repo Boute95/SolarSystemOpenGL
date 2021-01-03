@@ -10,8 +10,9 @@ namespace solar {
 
     public:
         virtual ~Drawable() {}
-        virtual void draw(GLManager& glManager) = 0;
+        virtual void draw() = 0;
         virtual const std::vector<glimac::ShapeVertex>& getVertices() = 0;
+        virtual void setGLManager(std::shared_ptr<GLManager>) = 0;
         
     };
 

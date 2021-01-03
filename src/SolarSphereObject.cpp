@@ -1,4 +1,5 @@
 #include <solar/SolarSphereObject.hpp>
+#include <iostream> // std::cout
 
 ///////////////////////////////////////////////////////////////////////////////
 solar::SolarSphereObject::SolarSphereObject(float radiusInKm) 
@@ -12,10 +13,29 @@ solar::SolarSphereObject::SolarSphereObject(float radiusInKm)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::draw(solar::GLManager& glManager) {
+void solar::SolarSphereObject::addColorTexture(const std::string& path) {
+    std::unique_ptr<glimac::Image> p_tex = glimac::loadImage(path);
+    if (!p_tex) {
+        std::cout << "WARNING : Can't load " << path << std::endl;
+    }
+    colorTexture = glManager->addTexture(p_tex);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+ void solar::SolarSphereObject::setGLManager(std::shared_ptr<GLManager> iGLManager) {
+     glManager = iGLManager;
+ }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::SolarSphereObject::draw() {
     glm::mat4 modelMatrix = glm::translate(glm::mat4(1.f), glm::vec3(0, 0, 0));
-    glManager.setUniformValue("uModelMatrix", modelMatrix);
-    glManager.drawVertices(GLint(vertices.size()));
+    glManager->setActiveTexture("uColorTexture", colorTexture);
+    glManager->setUniformValue("uModelMatrix", modelMatrix);
+    glManager->drawVertices(GLint(vertices.size()));
 }
 
 

@@ -10,7 +10,6 @@ layout(location = 3) in vec2 aVertexTexCoords;
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
-uniform mat4 uNormalMatrix;
 
 // Sorties du shader
 out vec3 vPosition;  // Position du sommet transformé dans l'espace View
@@ -20,11 +19,13 @@ out vec2 vTexCoords; // Coordonnées de texture du sommet
 void main() {
     vec4 vertexPosition = vec4(aVertexPosition, 1);
     vec4 vertexNormal = vec4(aVertexNormal, 0);
+
     mat4 MVMatrix =  uViewMatrix * uModelMatrix;
     mat4 MVPMatrix = uProjMatrix * MVMatrix;
+    mat4 normalMatrix = transpose(inverse(MVMatrix));
     
     vPosition = vec3(MVMatrix * vertexPosition);
-    // vNormal = vec3(uNormalMatrix * vertexNormal);
+    vNormal = vec3(normalMatrix * vertexNormal);
     vTexCoords = aVertexTexCoords;
 
     gl_Position = MVPMatrix * vertexPosition;

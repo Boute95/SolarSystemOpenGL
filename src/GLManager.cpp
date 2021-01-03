@@ -62,11 +62,45 @@ bool solar::GLManager::hasUniform(std::string id) const {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setUniformValue(std::string id, const GLint val) {
+    if (!hasUniform(id)) {
+        addUniform(id);
+    }
+    glUniform1i(uniforms[id], val);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::GLManager::setUniformValue(std::string id, const glm::mat4& iMat4) {
     if (!hasUniform(id)) {
         addUniform(id);
     }
     glUniformMatrix4fv(uniforms[id], 1, GL_FALSE, glm::value_ptr(iMat4));
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+GLuint solar::GLManager::addTexture(const std::unique_ptr<glimac::Image>& img) {
+    GLuint id;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GLsizei(img->getWidth()), GLsizei(img->getHeight()), 0, GL_RGBA, GL_FLOAT, img->getPixels());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    return id;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setActiveTexture(const std::string& location, const GLuint id, const GLenum textureUnit) {
+    activeTextures.insert(textureUnit);
+    glActiveTexture(textureUnit);
+    glBindTexture(GL_TEXTURE_2D, id);
+    setUniformValue(location, GLint(textureUnit - GL_TEXTURE0));
 }
 
 
@@ -82,5 +116,9 @@ void solar::GLManager::bind() {
 ///////////////////////////////////////////////////////////////////////////////
 void solar::GLManager::unbind() {
     vertexDrawStartIndex = 0;
+    for (auto& texUnit : activeTextures) {
+        glActiveTexture(texUnit);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
     glBindVertexArray(0);
 }

@@ -39,7 +39,8 @@ void solar::Engine::start(char* appPathStr) {
     // solarObjects.emplace("mercure", std::make_shared<SolarSphereObject>(2439.7));
     // solarObjects.emplace("venus", std::make_shared<SolarSphereObject>(6051.8));
     // stars.emplace("sun", std::make_shared<Star>(696340.f, glm::vec3(1.f), 10000));
-    solarObjects.emplace("testSphere", std::make_shared<SolarSphereObject>(1.0f));
+    solarObjects["testSphere"] = std::make_shared<SolarSphereObject>(1.0f);
+
 
     for(const auto& o : solarObjects) {
         renderEngine.addObject(o.second);
@@ -47,6 +48,8 @@ void solar::Engine::start(char* appPathStr) {
     for(const auto& o : stars) {
         renderEngine.addLight(o.second);
     }
+
+    solarObjects["testSphere"]->addColorTexture(applicationPath.dirPath() + "../assets/textures/earth.jpg");
 
     // Main loop
     bool done = false;

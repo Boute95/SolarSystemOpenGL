@@ -10,6 +10,7 @@ solar::RenderEngine::RenderEngine(const glimac::Program& p, glimac::SDLWindowMan
 ///////////////////////////////////////////////////////////////////////////////
 void solar::RenderEngine::addObject(const std::shared_ptr<Drawable>& iObj) {
     drawables.push_back(iObj);
+    iObj->setGLManager(std::shared_ptr<GLManager>(&glManager));
     glManager.addVertices(iObj->getVertices());
 }
 
@@ -39,7 +40,7 @@ void solar::RenderEngine::render() {
     glManager.setUniformValue("uViewMatrix", camera.getViewMatrix());
 
     for (auto d : drawables) {
-        d->draw(glManager);
+        d->draw();
     }
 
     windowManager.swapBuffers();
