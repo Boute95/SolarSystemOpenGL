@@ -3,7 +3,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::Camera::Camera() {}
+solar::Camera::Camera(float iAspectRatio) : aspectRatio(iAspectRatio) {}
 
 
 
@@ -22,8 +22,13 @@ void solar::Camera::setTarget(const glm::vec2& t) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::mat4 solar::Camera::getViewMatrix() {
-    glm::mat4 mat(1.f);
-    return mat;
+glm::mat4 solar::Camera::getProjMatrix() const {
+    return glm::perspective(45.f, aspectRatio, 0.1f, 100.0f);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+glm::mat4 solar::Camera::getViewMatrix() const {
+    return glm::translate(glm::mat4(1.f), glm::vec3(0.0f, 0.0f, -4.0f));
 }
 

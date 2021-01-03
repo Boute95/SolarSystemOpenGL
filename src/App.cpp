@@ -1,9 +1,12 @@
 #include <solar/Engine.hpp>
 
-int main() {
+int main(int argc, char** argv) {
 
-    solar::Engine engine;
-    engine.start();
+    if (argc > 0) {
+        solar::Engine engine;
+        engine.start(argv[0]);
+    }
+    
 
     return 0;
 }

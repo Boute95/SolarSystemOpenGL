@@ -5,6 +5,7 @@
 #include <memory>
 #include <solar/SolarSphereObject.hpp>
 #include <solar/Star.hpp>
+#include <glimac/Program.hpp>
 
 namespace solar {
 
@@ -16,7 +17,7 @@ namespace solar {
 
     public:
         Engine();
-        void start();
+        void start(char* appPathStr);
     };
     
     

@@ -1,17 +1,9 @@
 #include <solar/RenderEngine.hpp>
 #include <GL/glew.h>
-#include <iostream> // std::cerr
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::RenderEngine::RenderEngine(const glimac::SDLWindowManager& iWinManager, const Camera& iC) : 
-    windowManager(iWinManager), camera(iC) {
-        // Initialize glew for OpenGL3+ support
-        GLenum glewInitError = glewInit();
-        if(GLEW_OK != glewInitError) {
-            std::cerr << glewGetErrorString(glewInitError) << std::endl;
-            throw std::exception();
-        }
-    }
+solar::RenderEngine::RenderEngine(const glimac::Program& p, glimac::SDLWindowManager& iWinManager, const Camera& iC)
+ : windowManager(iWinManager), camera(iC), glManager(p) {}
 
 
 
@@ -26,6 +18,7 @@ void solar::RenderEngine::addObject(const std::shared_ptr<Drawable>& iObj) {
 ///////////////////////////////////////////////////////////////////////////////
 void solar::RenderEngine::addObjects(const std::vector<std::shared_ptr<Drawable>>& iObjects) {
     drawables.insert(drawables.end(), iObjects.begin(), iObjects.end());
+    //TODO : glManager.addVertices
 }
 
 
@@ -41,10 +34,16 @@ void solar::RenderEngine::addLight(const std::shared_ptr<LightSource>& iLight) {
 void solar::RenderEngine::render() {
 
     glManager.bind();
+
+    glManager.setUniformValue("uProjMatrix", camera.getProjMatrix());
+    glManager.setUniformValue("uViewMatrix", camera.getViewMatrix());
+
     for (auto d : drawables) {
         d->draw(glManager);
     }
+
+    windowManager.swapBuffers();
     glManager.unbind();
-    
+
 }
 
