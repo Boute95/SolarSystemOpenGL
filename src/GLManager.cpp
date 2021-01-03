@@ -32,7 +32,7 @@ solar::GLManager::GLManager(const glimac::Program& p) : program(p) {
 void solar::GLManager::addVertices(const std::vector<glimac::ShapeVertex>& v) {
     vertices.insert(vertices.end(), v.begin(), v.end());
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(vertices.size()), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(vertices.size() * sizeof(glimac::ShapeVertex)), &vertices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
