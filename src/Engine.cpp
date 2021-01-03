@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include <solar/Engine.hpp>
-#include <solar/RenderEngine.hpp>
 #include <solar/Camera.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <iostream> // std::cout
@@ -14,7 +13,7 @@ solar::Engine::Engine() {}
 ///////////////////////////////////////////////////////////////////////////////
 void solar::Engine::start(char* appPathStr) {
 
-    glimac::SDLWindowManager winManager(1280, 720, "SolarSystemOpenGL");
+    glimac::SDLWindowManager winManager(1920, 1080, "SolarSystemOpenGL");
 
     // Initialize glew for OpenGL3+ support
     GLenum glewInitError = glewInit();
@@ -33,23 +32,12 @@ void solar::Engine::start(char* appPathStr) {
     glimac::Program program = glimac::loadProgram(vs, fs);
     program.use();
 
-    solar::Camera camera(1280 / 720.f);
+    solar::Camera camera(1920 / 1080.f);
+    camera.translate(glm::vec3(0.f, 0.f, -1e9));
     RenderEngine renderEngine(program, winManager, camera);
+    PhysicsEngine physicsEngine;
 
-    // solarObjects.emplace("mercure", std::make_shared<SolarSphereObject>(2439.7));
-    // solarObjects.emplace("venus", std::make_shared<SolarSphereObject>(6051.8));
-    // stars.emplace("sun", std::make_shared<Star>(696340.f, glm::vec3(1.f), 10000));
-    solarObjects["testSphere"] = std::make_shared<SolarSphereObject>(1.0f);
-
-
-    for(const auto& o : solarObjects) {
-        renderEngine.addObject(o.second);
-    }
-    for(const auto& o : stars) {
-        renderEngine.addLight(o.second);
-    }
-
-    solarObjects["testSphere"]->addColorTexture(applicationPath.dirPath() + "../assets/textures/earth.jpg");
+    initObjects(applicationPath, renderEngine, physicsEngine);
 
     // Main loop
     bool done = false;
@@ -64,9 +52,43 @@ void solar::Engine::start(char* appPathStr) {
         }
 
         renderEngine.render();
+        physicsEngine.simulate();
 
     }
 
-    
+    renderEngine.clear();
 
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& renderEngine, PhysicsEngine& physicsEngine) {
+    stars["sun"] = std::make_shared<Star>(696340.f * 10, glm::vec3(1.f), 10000);
+    renderEngine.addObject(stars["sun"]);
+    stars["sun"]->setRotationPeriod(25.f * 24); // 25 days
+    stars["sun"]->addColorTexture(appPath.dirPath() + "../assets/textures/sun.jpg");
+
+    solarObjects["mercure"] = std::make_shared<SolarSphereObject>(2439.7f * 2000);
+    renderEngine.addObject(solarObjects["mercure"]);
+    physicsEngine.addObject(solarObjects["mercure"]);
+    solarObjects["mercure"]->setParent(stars["sun"]);
+    solarObjects["mercure"]->setApoapsis(69.8e6);
+    solarObjects["mercure"]->setPeriapsis(46.0e6);
+    solarObjects["mercure"]->setOrbitalEccentricity(0.205f);
+    solarObjects["mercure"]->setOrbitalPeriod(88.f * 24);
+    solarObjects["mercure"]->setRotationPeriod(1407.6f);
+    solarObjects["mercure"]->addColorTexture(appPath.dirPath() + "../assets/textures/mercure.jpg");
+    
+    // solarObjects["mercure"] = std::make_shared<SolarSphereObject>(2439.7f);
+    // renderEngine.addObject(solarObjects["mercure"]);
+    // // solarObjects["mercure"]->setParent(stars["sun"]);
+    // solarObjects["mercure"]->setApoapsis(69.8e6);
+    // solarObjects["mercure"]->setPeriapsis(46.0e6);
+    // solarObjects["mercure"]->setOrbitalPeriod(88.f * 24);
+    // solarObjects["mercure"]->setRotationPeriod(1407.6f);
+    // solarObjects["mercure"]->addColorTexture(appPath.dirPath() + "../assets/textures/mercure.jpg");
+    // solarObjects["venus"] = std::make_shared<SolarSphereObject>(6051.8f));
+    
+}
+

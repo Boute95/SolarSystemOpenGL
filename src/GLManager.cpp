@@ -122,3 +122,11 @@ void solar::GLManager::unbind() {
     }
     glBindVertexArray(0);
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::clear() {
+    glDeleteBuffers(1, &vbo);
+    glDeleteVertexArrays(1, &vao);
+}

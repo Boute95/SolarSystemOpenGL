@@ -23,6 +23,7 @@ target_sources(solarSystem
         src/App.cpp
         src/Engine.cpp
         src/RenderEngine.cpp
+        src/PhysicsEngine.cpp
         src/GLManager.cpp
         src/SolarSphereObject.cpp
         src/Camera.cpp

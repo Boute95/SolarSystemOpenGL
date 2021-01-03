@@ -2,20 +2,24 @@
 #define SOLAR_CAMERA_HPP
 
 #include <glm/geometric.hpp>
+#include <glm/matrix.hpp>
+#include <solar/Transformable.hpp>
 
 namespace solar {
 
-    class Camera {
+    class Camera : public Transformable {
 
     private:
         float aspectRatio;
-        glm::vec2 position;
-        glm::vec2 target;
+        glm::mat4 transformMatrix;
 
     public:
         Camera(float iAspectRatio);
-        void setPosition(const glm::vec2& p);
-        void setTarget(const glm::vec2& t);
+        virtual void translate(const glm::vec3&) override;
+        virtual void rotate(const float angle, const glm::vec3& axis) override;
+        virtual void scale(const glm::vec3&) override;
+        virtual void resetTransforms() override;
+        virtual glm::mat4 getTransformMatrix() const override;
         glm::mat4 getProjMatrix() const;
         glm::mat4 getViewMatrix() const;
 

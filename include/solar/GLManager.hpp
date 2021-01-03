@@ -40,6 +40,7 @@ namespace solar {
         void setActiveTexture(const std::string& location, const GLuint id, const GLenum textureUnit = GL_TEXTURE0);
         void bind();
         void unbind();
+        void clear();
 
     };
 

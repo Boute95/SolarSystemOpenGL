@@ -19,14 +19,15 @@ namespace solar {
         std::vector<std::shared_ptr<LightSource>> lightSources;
         glimac::SDLWindowManager& windowManager;
         const Camera& camera;
-        GLManager glManager;
+        std::shared_ptr<GLManager> glManager;
 
     public:
         RenderEngine(const glimac::Program& p, glimac::SDLWindowManager& iWinManager, const Camera& iC);
-        void addObject(const std::shared_ptr<Drawable>& iObj);
+        void addObject(std::shared_ptr<Drawable> iObj);
         void addObjects(const std::vector<std::shared_ptr<Drawable>>& iObjects);
-        void addLight(const std::shared_ptr<LightSource>& iLight);
+        void addLight(std::shared_ptr<LightSource> iLight);
         void render();
+        void clear();
 
     };
 
