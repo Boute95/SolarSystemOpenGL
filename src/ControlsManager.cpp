@@ -12,8 +12,8 @@ void solar::ControlsManager::update(SDL_Event& e, const glimac::SDLWindowManager
             lastMousePosition = newMousePosition;
         }
         glm::ivec2 deltaMousePosition{newMousePosition - lastMousePosition};
-        camController.rotateLeft(deltaMousePosition.x * 0.1);
-        camController.rotateUp(deltaMousePosition.y * 0.1);
+        camController.rotateLeft(deltaMousePosition.x * 1);
+        camController.rotateUp(deltaMousePosition.y * 1);
         lastMousePosition = newMousePosition;
     }
 }

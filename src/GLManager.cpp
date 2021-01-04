@@ -39,8 +39,8 @@ void solar::GLManager::addVertices(const std::vector<glimac::ShapeVertex>& v) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::GLManager::drawVertices(const GLint vertexCount) {
-    glDrawArrays(GL_TRIANGLES, vertexDrawStartIndex, vertexCount);
+void solar::GLManager::drawVertices(const GLenum mode, const GLint vertexCount) {
+    glDrawArrays(mode, vertexDrawStartIndex, vertexCount);
     vertexDrawStartIndex += vertexCount;
 }
 

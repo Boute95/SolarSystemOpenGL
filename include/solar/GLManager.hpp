@@ -26,7 +26,7 @@ namespace solar {
     public:
         GLManager(const glimac::Program& p);
         void addVertices(const std::vector<glimac::ShapeVertex>& v);
-        void drawVertices(const GLint vertexCount);
+        void drawVertices(const GLenum mode, const GLint vertexCount);
         void addUniform(std::string id);
         // void deleteUniform(std::string id);
         bool hasUniform(std::string id) const;

@@ -37,15 +37,15 @@ void solar::Camera::resetTransforms() {
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::vec3 solar::Camera::getWorldPosition() const {
-    auto translateCol = glm::column(transformMatrix, 3);
-    return glm::vec3(translateCol.x, translateCol.y, translateCol.z);
+    glm::vec4 v = transformMatrix * glm::vec4(0.f, 0.f, 0.f, 1.f);
+    return glm::vec3(v.x, v.y, v.z);
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::mat4 solar::Camera::getProjMatrix() const {
-    return glm::perspective(50.f, static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
+    return glm::perspective(glm::radians(47.f), static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
 }
 
 

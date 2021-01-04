@@ -2,6 +2,8 @@
 #include <solar/Engine.hpp>
 #include <solar/CameraController.hpp>
 #include <solar/ControlsManager.hpp>
+#include <solar/SolarSphereBase.hpp>
+#include <solar/Ring.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <iostream> // std::cout
 
@@ -39,15 +41,16 @@ void solar::Engine::start(char* appPathStr) {
     solar::ControlsManager controlsManager;
     RenderEngine renderEngine(program, winManager, cameraController.getCamera());
     PhysicsEngine physicsEngine;
-    physicsEngine.setHourPerSecond(50.);
+    physicsEngine.setHourPerSecond(10.);
 
     // Initializing solar objects
     initObjects(applicationPath, renderEngine, physicsEngine);
 
     // Setting up the different views
+    physicsEngine.simulate();
     View topView;
-    topView.setTrackball(solarObjects["sun"]->getWorldPosition(), -4e9, 0., 180. - 60.);
-    cameraController.addView("topView", topView);
+    topView.setTrackball(solarObjects["sun"]->getWorldPosition(), -2e9, 0., 60.);
+    cameraController.setView("topView", topView);
     cameraController.switchView("topView");
 
     // Main loop
@@ -81,7 +84,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["sun"] = std::make_shared<SolarSphereBase>(696340. * 10);
     renderEngine.addObject(solarObjects["sun"]);
     solarObjects["sun"]->setRotationPeriod(25. * 24); // 25 days
-    solarObjects["sun"]->addColorTexture(appPath.dirPath() + "../assets/textures/sun.jpg");
+    solarObjects["sun"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/sun.jpg");
 
     solarObjects["mercure"] = std::make_shared<SolarSphereBase>(2439.7 * 3000);
     renderEngine.addObject(solarObjects["mercure"]);
@@ -92,7 +95,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["mercure"]->setOrbitalEccentricity(0.205);
     solarObjects["mercure"]->setOrbitalPeriod(88. * 24);
     solarObjects["mercure"]->setRotationPeriod(1407.6);
-    solarObjects["mercure"]->addColorTexture(appPath.dirPath() + "../assets/textures/mercure.jpg");
+    solarObjects["mercure"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/mercure.jpg");
     
     solarObjects["venus"] = std::make_shared<SolarSphereBase>(6051.8 * 2000);
     renderEngine.addObject(solarObjects["venus"]);
@@ -103,7 +106,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["venus"]->setOrbitalEccentricity(0.007);
     solarObjects["venus"]->setOrbitalPeriod(224.7 * 24);
     solarObjects["venus"]->setRotationPeriod(-5832.5);
-    solarObjects["venus"]->addColorTexture(appPath.dirPath() + "../assets/textures/venus.jpg");
+    solarObjects["venus"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/venus.jpg");
 
     solarObjects["earth"] = std::make_shared<SolarSphereBase>(6378.137 * 2000);
     renderEngine.addObject(solarObjects["earth"]);
@@ -114,7 +117,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["earth"]->setOrbitalEccentricity(0.017);
     solarObjects["earth"]->setOrbitalPeriod(365.2 * 24);
     solarObjects["earth"]->setRotationPeriod(23.9);
-    solarObjects["earth"]->addColorTexture(appPath.dirPath() + "../assets/textures/earth.jpg");
+    solarObjects["earth"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/earth.jpg");
 
     solarObjects["mars"] = std::make_shared<SolarSphereBase>(3389.5 * 2000);
     renderEngine.addObject(solarObjects["mars"]);
@@ -125,7 +128,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["mars"]->setOrbitalEccentricity(0.094);
     solarObjects["mars"]->setOrbitalPeriod(687.0 * 24);
     solarObjects["mars"]->setRotationPeriod(24.6);
-    solarObjects["mars"]->addColorTexture(appPath.dirPath() + "../assets/textures/mars.jpg");
+    solarObjects["mars"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/mars.jpg");
 
     solarObjects["jupiter"] = std::make_shared<SolarSphereBase>(69911. * 1000);
     renderEngine.addObject(solarObjects["jupiter"]);
@@ -136,9 +139,11 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["jupiter"]->setOrbitalEccentricity(0.049);
     solarObjects["jupiter"]->setOrbitalPeriod(4331. * 24);
     solarObjects["jupiter"]->setRotationPeriod(9.9);
-    solarObjects["jupiter"]->addColorTexture(appPath.dirPath() + "../assets/textures/jupiter.jpg");
+    solarObjects["jupiter"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/jupiter.jpg");
 
-    solarObjects["saturn"] = std::make_shared<SolarSphereBase>(58232. * 1000);
+    double saturnRadius = 58232. * 1000;
+    solarObjects["saturn"] = std::make_shared<Ring>(saturnRadius + 7000. * 1000, saturnRadius + 30000. * 1000,
+        std::make_shared<SolarSphereBase>(saturnRadius));
     renderEngine.addObject(solarObjects["saturn"]);
     physicsEngine.addObject(solarObjects["saturn"]);
     solarObjects["saturn"]->setParent(solarObjects["sun"]);
@@ -147,7 +152,8 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["saturn"]->setOrbitalEccentricity(0.057);
     solarObjects["saturn"]->setOrbitalPeriod(10747. * 24);
     solarObjects["saturn"]->setRotationPeriod(10.7);
-    solarObjects["saturn"]->addColorTexture(appPath.dirPath() + "../assets/textures/saturn.jpg");
+    solarObjects["saturn"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/saturn.jpg");
+    dynamic_cast<Ring&>(*(solarObjects["saturn"])).addRingColorTexture(appPath.dirPath() + "../assets/textures/color/saturn_ring.jpg");
 
     solarObjects["uranus"] = std::make_shared<SolarSphereBase>(25559. * 1000);
     renderEngine.addObject(solarObjects["uranus"]);
@@ -158,7 +164,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["uranus"]->setOrbitalEccentricity(0.046);
     solarObjects["uranus"]->setOrbitalPeriod(30589. * 24);
     solarObjects["uranus"]->setRotationPeriod(-17.2);
-    solarObjects["uranus"]->addColorTexture(appPath.dirPath() + "../assets/textures/uranus.jpg");
+    solarObjects["uranus"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/uranus.jpg");
 
     solarObjects["neptune"] = std::make_shared<SolarSphereBase>(24622. * 1000);
     renderEngine.addObject(solarObjects["neptune"]);
@@ -169,7 +175,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["neptune"]->setOrbitalEccentricity(0.011);
     solarObjects["neptune"]->setOrbitalPeriod(59800. * 24);
     solarObjects["neptune"]->setRotationPeriod(16.1);
-    solarObjects["neptune"]->addColorTexture(appPath.dirPath() + "../assets/textures/neptune.jpg");
+    solarObjects["neptune"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/neptune.jpg");
 
     solarObjects["pluto"] = std::make_shared<SolarSphereBase>(1188.3 * 4000);
     renderEngine.addObject(solarObjects["pluto"]);
@@ -180,7 +186,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["pluto"]->setOrbitalEccentricity(0.244);
     solarObjects["pluto"]->setOrbitalPeriod(90560. * 24);
     solarObjects["pluto"]->setRotationPeriod(-153.3);
-    solarObjects["pluto"]->addColorTexture(appPath.dirPath() + "../assets/textures/pluto.jpg");
+    solarObjects["pluto"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/pluto.jpg");
     
 }
 

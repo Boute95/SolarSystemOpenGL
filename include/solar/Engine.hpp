@@ -3,8 +3,7 @@
 
 #include <unordered_map>
 #include <memory>
-#include <solar/SolarSphereBase.hpp>
-// #include <solar/Star.hpp>
+#include <solar/SolarSphere.hpp>
 #include <solar/RenderEngine.hpp>
 #include <solar/PhysicsEngine.hpp>
 #include <glimac/Program.hpp>
@@ -14,8 +13,7 @@ namespace solar {
     class Engine {
 
     private: 
-        std::unordered_map<std::string, std::shared_ptr<SolarSphereBase>> solarObjects;
-        // std::unordered_map<std::string, std::shared_ptr<Star>> stars;
+        std::unordered_map<std::string, std::shared_ptr<SolarSphere>> solarObjects;
 
         void initObjects(const glimac::FilePath& appPath, RenderEngine& renderEngine, PhysicsEngine& physicsEngine);
 

@@ -42,8 +42,8 @@ void solar::SolarSphereBase::resetTransforms() {
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::vec3 solar::SolarSphereBase::getWorldPosition() const {
-    auto translateCol = glm::column(transformMatrix, 3);
-    return glm::vec3(translateCol.x, translateCol.y, translateCol.z);
+    glm::vec4 v = transformMatrix * glm::vec4(0.f, 0.f, 0.f, 1.f);
+    return glm::vec3(v.x, v.y, v.z);
 }
 
 
@@ -136,7 +136,7 @@ void solar::SolarSphereBase::addColorTexture(const std::string& path) {
 void solar::SolarSphereBase::draw() {
     glManager->setUniformValue("uModelMatrix", transformMatrix);
     glManager->setActiveTexture("uColorTexture", colorTexture);
-    glManager->drawVertices(GLint(vertices.size()));
+    glManager->drawVertices(GL_TRIANGLES, GLint(vertices.size()));
 }
 
 
