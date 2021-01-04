@@ -12,13 +12,13 @@ namespace solar {
     private:
     glm::vec3 position;
     glm::vec3 color;
-    float intensity;
+    double intensity;
 
     public:
-        Star(const float radiusInKm, const glm::vec3& iColor, const float iIntensity);
+        Star(const double radiusInKm, const glm::vec3& iColor, const double iIntensity);
         virtual glm::vec3 getPosition() const override;
         virtual glm::vec3 getColor() const override;
-        virtual float getIntensity() const override;
+        virtual double getIntensity() const override;
 
     };
 

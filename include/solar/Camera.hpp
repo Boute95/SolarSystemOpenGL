@@ -3,6 +3,7 @@
 
 #include <glm/geometric.hpp>
 #include <glm/matrix.hpp>
+#include <glm/gtc/matrix_access.hpp>
 #include <solar/Transformable.hpp>
 
 namespace solar {
@@ -10,16 +11,16 @@ namespace solar {
     class Camera : public Transformable {
 
     private:
-        float aspectRatio;
+        double aspectRatio;
         glm::mat4 transformMatrix;
 
     public:
-        Camera(float iAspectRatio);
+        Camera(double iAspectRatio);
         virtual void translate(const glm::vec3&) override;
         virtual void rotate(const float angle, const glm::vec3& axis) override;
         virtual void scale(const glm::vec3&) override;
         virtual void resetTransforms() override;
-        virtual glm::mat4 getTransformMatrix() const override;
+        virtual glm::vec3 getWorldPosition() const override;
         glm::mat4 getProjMatrix() const;
         glm::mat4 getViewMatrix() const;
 

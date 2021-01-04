@@ -10,7 +10,7 @@ namespace solar {
     public:
         virtual ~LightSource() {}
         virtual glm::vec3 getPosition() const = 0;
-        virtual float getIntensity() const = 0;
+        virtual double getIntensity() const = 0;
         virtual glm::vec3 getColor() const = 0;
 
     };

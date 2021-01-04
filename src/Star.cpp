@@ -1,7 +1,7 @@
 #include <solar/Star.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::Star::Star(const float radiusInKm, const glm::vec3& iColor, const float iIntensity)
+solar::Star::Star(const double radiusInKm, const glm::vec3& iColor, const double iIntensity)
     : SolarSphereObject(radiusInKm), color(iColor), intensity(iIntensity) {}
 
 
@@ -21,6 +21,6 @@ glm::vec3 solar::Star::getColor() const {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-float solar::Star::getIntensity() const {
+double solar::Star::getIntensity() const {
     return intensity;
 }

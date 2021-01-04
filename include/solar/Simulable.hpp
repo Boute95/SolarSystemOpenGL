@@ -12,13 +12,13 @@ namespace solar {
     public:
         virtual ~Simulable() {}
         virtual void setParent(std::shared_ptr<Transformable>) = 0;
-        virtual void setApoapsis(const float km) = 0;
-        virtual void setPeriapsis(const float km) = 0;
-        virtual void setOrbitalEccentricity(const float) = 0;
-        virtual void setOrbitalPeriod(const float hours) = 0;
-        virtual void setRotationPeriod(const float hours) = 0;
-        virtual void setOrbitalInclination(const float degrees) = 0;
-        virtual void update(const float timeInHour) = 0;
+        virtual void setApoapsis(const double km) = 0;
+        virtual void setPeriapsis(const double km) = 0;
+        virtual void setOrbitalEccentricity(const double) = 0;
+        virtual void setOrbitalPeriod(const double hours) = 0;
+        virtual void setRotationPeriod(const double hours) = 0;
+        virtual void setOrbitalInclination(const double degrees) = 0;
+        virtual void update(const double timeInHour) = 0;
 
     };
 

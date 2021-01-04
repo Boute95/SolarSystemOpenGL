@@ -3,7 +3,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::Camera::Camera(float iAspectRatio) : aspectRatio(iAspectRatio), transformMatrix() {}
+solar::Camera::Camera(double iAspectRatio) : aspectRatio(iAspectRatio), transformMatrix() {}
 
 
 
@@ -36,15 +36,16 @@ void solar::Camera::resetTransforms() {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::mat4 solar::Camera::getTransformMatrix() const {
-    return transformMatrix;
+glm::vec3 solar::Camera::getWorldPosition() const {
+    auto translateCol = glm::column(transformMatrix, 3);
+    return glm::vec3(translateCol.x, translateCol.y, translateCol.z);
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::mat4 solar::Camera::getProjMatrix() const {
-    return glm::perspective(45.f, aspectRatio, float(1e4), float(1e12));
+    return glm::perspective(50.f, static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
 }
 
 

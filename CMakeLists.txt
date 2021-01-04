@@ -26,8 +26,10 @@ target_sources(solarSystem
         src/PhysicsEngine.cpp
         src/GLManager.cpp
         src/SolarSphereObject.cpp
-        src/Camera.cpp
         src/Star.cpp
+        src/Camera.cpp
+        src/CameraController.cpp
+        src/View.cpp
 )
 
 

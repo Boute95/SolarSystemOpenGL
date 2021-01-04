@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <memory>
+#include <chrono>
 #include <solar/Simulable.hpp>
 
 namespace solar {
@@ -11,11 +12,14 @@ namespace solar {
     
     private:
         std::vector<std::shared_ptr<Simulable>> simulables;
-        float timeInHour;
+        double timeInHour;
+        double hourPerSecond;
+        std::chrono::system_clock::time_point timeLastSimulate;
 
     public:
+        PhysicsEngine();
         void addObject(std::shared_ptr<Simulable> o);
-        // void applyTimeFactor(float f);
+        void setHourPerSecond(const double h);
         void simulate();
 
     };
