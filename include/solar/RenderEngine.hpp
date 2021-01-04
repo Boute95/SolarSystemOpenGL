@@ -24,7 +24,6 @@ namespace solar {
     public:
         RenderEngine(const glimac::Program& p, glimac::SDLWindowManager& iWinManager, const Camera& iC);
         void addObject(std::shared_ptr<Drawable> iObj);
-        void addObjects(const std::vector<std::shared_ptr<Drawable>>& iObjects);
         void addLight(std::shared_ptr<LightSource> iLight);
         void render();
         void clear();

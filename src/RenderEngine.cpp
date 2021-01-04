@@ -19,14 +19,6 @@ void solar::RenderEngine::addObject(std::shared_ptr<Drawable> iObj) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::RenderEngine::addObjects(const std::vector<std::shared_ptr<Drawable>>& iObjects) {
-    drawables.insert(drawables.end(), iObjects.begin(), iObjects.end());
-    //TODO : glManager.addVertices
-}
-
-
-
-///////////////////////////////////////////////////////////////////////////////
 void solar::RenderEngine::addLight(std::shared_ptr<LightSource> iLight) {
     lightSources.push_back(iLight);
 }

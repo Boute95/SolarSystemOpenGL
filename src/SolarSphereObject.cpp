@@ -1,8 +1,6 @@
 #include <solar/SolarSphereObject.hpp>
 #include <iostream> // std::cout
 
-#define PI 3.14159265358979323846
-
 ///////////////////////////////////////////////////////////////////////////////
 solar::SolarSphereObject::SolarSphereObject(double radiusInKm) 
     : sphere(static_cast<float>(radiusInKm), 32, 32), vertices(size_t(sphere.getVertexCount())) {
@@ -102,14 +100,14 @@ void solar::SolarSphereObject::setOrbitalInclination(const double degrees) {
 ///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereObject::update(const double timeInHour) {
     resetTransforms();
-    double theta = fmod(timeInHour, orbitalPeriod) * 2 * PI / orbitalPeriod;
+    double theta = fmod(timeInHour, orbitalPeriod) * 2 * M_PI / orbitalPeriod;
     double alpha = (apoapsis + periapsis) / 2;
     double r = (alpha * (1 - orbitalEccentricity * orbitalEccentricity)) / (1 + orbitalEccentricity * cos(theta));
     // rotate(static_cast<float>(theta), glm::vec3(0.f, 0.f, 1.f));
     double x = r * cos(theta);
     double y = r * sin(theta);
     translate(glm::vec3(x, 0.f, y));
-    double selfRotation = fmod(timeInHour, rotationPeriod) * 2 * PI / rotationPeriod;
+    double selfRotation = fmod(timeInHour, rotationPeriod) * 2 * M_PI / rotationPeriod;
     rotate(static_cast<float>(selfRotation), glm::vec3(0.f, 1.f, 0.f));
 }
 

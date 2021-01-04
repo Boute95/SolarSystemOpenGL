@@ -33,6 +33,20 @@ void solar::CameraController::switchView(const std::string id) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::CameraController::rotateLeft(const double degrees) {
+    camera.rotate(static_cast<float>(degrees * M_PI / 180.), glm::vec3(0.0f, 1.0f, 0.0f));
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::CameraController::rotateUp(const double degrees) {
+    camera.rotate(static_cast<float>(degrees * M_PI / 180.), glm::vec3(1.0f, 0.0f, 0.0f));
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 const solar::Camera& solar::CameraController::getCamera() const {
     return camera;
 }

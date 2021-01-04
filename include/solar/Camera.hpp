@@ -12,6 +12,9 @@ namespace solar {
 
     private:
         double aspectRatio;
+        glm::vec3 translation;
+        float angleX;
+        float angleY;
         glm::mat4 transformMatrix;
 
     public:

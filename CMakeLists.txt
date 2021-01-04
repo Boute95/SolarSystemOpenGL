@@ -30,6 +30,7 @@ target_sources(solarSystem
         src/Camera.cpp
         src/CameraController.cpp
         src/View.cpp
+        src/ControlsManager.cpp
 )
 
 

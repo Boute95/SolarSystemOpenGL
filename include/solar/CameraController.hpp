@@ -18,6 +18,8 @@ namespace solar {
         CameraController(const double iAspectRatio);
         void addView(const std::string id, const View& view);
         void switchView(const std::string id);
+        void rotateLeft(const double degrees);
+        void rotateUp(const double degrees);
         const Camera& getCamera() const;
     };
 

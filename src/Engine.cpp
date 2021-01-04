@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <solar/Engine.hpp>
 #include <solar/CameraController.hpp>
+#include <solar/ControlsManager.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <iostream> // std::cout
 
@@ -35,6 +36,7 @@ void solar::Engine::start(char* appPathStr) {
 
     // Initializing Engines and controllers
     solar::CameraController cameraController(1920 / 1080.);
+    solar::ControlsManager controlsManager;
     RenderEngine renderEngine(program, winManager, cameraController.getCamera());
     PhysicsEngine physicsEngine;
     physicsEngine.setHourPerSecond(50.);
@@ -57,7 +59,10 @@ void solar::Engine::start(char* appPathStr) {
         while(winManager.pollEvent(e)) {
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
+            } else {
+                controlsManager.update(e, winManager, cameraController);
             }
+
         }
 
         renderEngine.render();
