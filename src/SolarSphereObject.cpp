@@ -1,6 +1,8 @@
 #include <solar/SolarSphereObject.hpp>
 #include <iostream> // std::cout
 
+#define PI 3.14159265358979323846f
+
 ///////////////////////////////////////////////////////////////////////////////
 solar::SolarSphereObject::SolarSphereObject(float radiusInKm) 
     : sphere(radiusInKm, 32, 32), vertices(size_t(sphere.getVertexCount())) {
@@ -100,11 +102,11 @@ void solar::SolarSphereObject::setOrbitalInclination(const float degrees) {
 ///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereObject::update(const float timeInHour) {
     resetTransforms();
-    float theta = float(fmod(timeInHour, 2 * 3.141593f));
+    float theta = float(fmod(timeInHour, orbitalPeriod)) * 2 * PI / orbitalPeriod;
     float alpha = (apoapsis + periapsis) / 2;
     float r = (alpha * (1 - orbitalEccentricity * orbitalEccentricity)) / (1 + orbitalEccentricity * float(cos(theta)));
     rotate(theta, glm::vec3(0.f, 0.f, 1.f));
-    translate(glm::vec3(0.f, r, 0.f));
+    translate(glm::vec3(r, 0.f, 0.f));
 }
 
 
@@ -114,6 +116,7 @@ void solar::SolarSphereObject::addColorTexture(const std::string& path) {
     std::unique_ptr<glimac::Image> p_tex = glimac::loadImage(path);
     if (!p_tex) {
         std::cout << "WARNING : Can't load " << path << std::endl;
+        return;
     }
     colorTexture = glManager->addTexture(p_tex);
 }
