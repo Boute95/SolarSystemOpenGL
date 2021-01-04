@@ -1,16 +1,16 @@
-#ifndef SOLAR_SOLARSPHEREOBJECT_HPP
-#define SOLAR_SOLARSPHEREOBJECT_HPP
+#ifndef SOLAR_SOLARSPHEREBASE_HPP
+#define SOLAR_SOLARSPHEREBASE_HPP
 
+#include <solar/SolarSphere.hpp>
 #include <glimac/Sphere.hpp>
 #include <glimac/Image.hpp>
 #include <glm/gtc/matrix_access.hpp>
-#include <solar/Drawable.hpp>
-#include <solar/Simulable.hpp>
+
 #include <vector>
 
 namespace solar {
 
-    class SolarSphereObject : public Drawable, public Simulable {
+    class SolarSphereBase : public SolarSphere {
 
     private:
         std::shared_ptr<GLManager> glManager;
@@ -29,10 +29,12 @@ namespace solar {
         double orbitalInclination;
 
     public:
-        SolarSphereObject(double radiusInKm);
+        SolarSphereBase(double radiusInKm);
+        // Drawable
         virtual void draw() override;
         virtual const std::vector<glimac::ShapeVertex>& getVertices() override;
         virtual void setGLManager(std::shared_ptr<GLManager>) override;
+        // Simulable
         virtual void translate(const glm::vec3&) override;
         virtual void rotate(const float angle, const glm::vec3& axis) override;
         virtual void scale(const glm::vec3&) override;
@@ -46,7 +48,8 @@ namespace solar {
         virtual void setRotationPeriod(const double hours) override;
         virtual void setOrbitalInclination(const double degrees) override;
         virtual void update(const double timeInHour) override;
-        virtual void addColorTexture(const std::string& path);
+        // SphereObject
+        virtual void addColorTexture(const std::string& path) override;
 
     };
 

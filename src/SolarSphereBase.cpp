@@ -1,8 +1,8 @@
-#include <solar/SolarSphereObject.hpp>
+#include <solar/SolarSphereBase.hpp>
 #include <iostream> // std::cout
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::SolarSphereObject::SolarSphereObject(double radiusInKm) 
+solar::SolarSphereBase::SolarSphereBase(double radiusInKm) 
     : sphere(static_cast<float>(radiusInKm), 32, 32), vertices(size_t(sphere.getVertexCount())) {
     auto p = sphere.getDataPointer();
     for (size_t i = 0 ; i < size_t(sphere.getVertexCount()) ; i++) {
@@ -13,35 +13,35 @@ solar::SolarSphereObject::SolarSphereObject(double radiusInKm)
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::translate(const glm::vec3& v) {
+void solar::SolarSphereBase::translate(const glm::vec3& v) {
     transformMatrix = glm::translate(transformMatrix, v);
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::rotate(const float angle, const glm::vec3& axis) {
+void solar::SolarSphereBase::rotate(const float angle, const glm::vec3& axis) {
     transformMatrix = glm::rotate(transformMatrix, angle, axis);
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::scale(const glm::vec3& v) {
+void solar::SolarSphereBase::scale(const glm::vec3& v) {
     transformMatrix = glm::scale(transformMatrix, v);
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::resetTransforms() {
+void solar::SolarSphereBase::resetTransforms() {
     transformMatrix = glm::mat4();
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::vec3 solar::SolarSphereObject::getWorldPosition() const {
+glm::vec3 solar::SolarSphereBase::getWorldPosition() const {
     auto translateCol = glm::column(transformMatrix, 3);
     return glm::vec3(translateCol.x, translateCol.y, translateCol.z);
 }
@@ -49,56 +49,56 @@ glm::vec3 solar::SolarSphereObject::getWorldPosition() const {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setParent(std::shared_ptr<Transformable> p) {
+void solar::SolarSphereBase::setParent(std::shared_ptr<Transformable> p) {
     parent = p;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setApoapsis(const double km) {
+void solar::SolarSphereBase::setApoapsis(const double km) {
     apoapsis = km;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setPeriapsis(const double km) {
+void solar::SolarSphereBase::setPeriapsis(const double km) {
     periapsis = km;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setOrbitalEccentricity(const double e) {
+void solar::SolarSphereBase::setOrbitalEccentricity(const double e) {
     orbitalEccentricity = e;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setOrbitalPeriod(const double hours) {
+void solar::SolarSphereBase::setOrbitalPeriod(const double hours) {
     orbitalPeriod = hours;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setRotationPeriod(const double hours) {
+void solar::SolarSphereBase::setRotationPeriod(const double hours) {
     rotationPeriod = hours;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::setOrbitalInclination(const double degrees) {
+void solar::SolarSphereBase::setOrbitalInclination(const double degrees) {
     orbitalInclination = degrees;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::update(const double timeInHour) {
+void solar::SolarSphereBase::update(const double timeInHour) {
     resetTransforms();
     double theta = fmod(timeInHour, orbitalPeriod) * 2 * M_PI / orbitalPeriod;
     double alpha = (apoapsis + periapsis) / 2;
@@ -114,7 +114,7 @@ void solar::SolarSphereObject::update(const double timeInHour) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::addColorTexture(const std::string& path) {
+void solar::SolarSphereBase::addColorTexture(const std::string& path) {
     std::unique_ptr<glimac::Image> p_tex = glimac::loadImage(path);
     if (!p_tex) {
         std::cout << "WARNING : Can't load " << path << std::endl;
@@ -126,14 +126,14 @@ void solar::SolarSphereObject::addColorTexture(const std::string& path) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
- void solar::SolarSphereObject::setGLManager(std::shared_ptr<GLManager> iGLManager) {
+ void solar::SolarSphereBase::setGLManager(std::shared_ptr<GLManager> iGLManager) {
      glManager = iGLManager;
  }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereObject::draw() {
+void solar::SolarSphereBase::draw() {
     glManager->setUniformValue("uModelMatrix", transformMatrix);
     glManager->setActiveTexture("uColorTexture", colorTexture);
     glManager->drawVertices(GLint(vertices.size()));
@@ -142,6 +142,6 @@ void solar::SolarSphereObject::draw() {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-const std::vector<glimac::ShapeVertex>& solar::SolarSphereObject::getVertices() {
+const std::vector<glimac::ShapeVertex>& solar::SolarSphereBase::getVertices() {
     return vertices;
 }
