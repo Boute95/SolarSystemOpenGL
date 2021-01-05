@@ -1,7 +1,7 @@
 #ifndef SOLAR_VIEW_HPP
 #define SOLAR_VIEW_HPP
 
-#include <glm/common.hpp>
+#include <glm/glm.hpp>
 
 namespace solar {
 

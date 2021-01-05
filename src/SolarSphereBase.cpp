@@ -3,7 +3,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 solar::SolarSphereBase::SolarSphereBase(double radiusInKm) 
-    : sphere(static_cast<float>(radiusInKm), 32, 32), vertices(size_t(sphere.getVertexCount())) {
+    : sphere(static_cast<float>(radiusInKm), 32, 32), vertices(size_t(sphere.getVertexCount())), transformMatrix(1.f) {
     auto p = sphere.getDataPointer();
     for (size_t i = 0 ; i < size_t(sphere.getVertexCount()) ; i++) {
         vertices[i] = p[i];
@@ -35,7 +35,7 @@ void solar::SolarSphereBase::scale(const glm::vec3& v) {
 
 ///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereBase::resetTransforms() {
-    transformMatrix = glm::mat4();
+    transformMatrix = glm::mat4(1.f);
 }
 
 

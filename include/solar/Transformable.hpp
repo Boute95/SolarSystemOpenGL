@@ -1,7 +1,7 @@
 #ifndef SOLAR_TRANSFORMABLE_HPP
 #define SOLAR_TRANSFORMABLE_HPP
 
-#include <glm/geometric.hpp>
+#include <glm/glm.hpp>
 
 namespace solar {
 

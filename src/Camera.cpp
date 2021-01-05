@@ -1,9 +1,11 @@
 #include <solar/Camera.hpp>
 #include <glimac/SDLWindowManager.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::Camera::Camera(double iAspectRatio) : aspectRatio(iAspectRatio), transformMatrix() {}
+solar::Camera::Camera(double iAspectRatio) 
+: aspectRatio(iAspectRatio), transformMatrix(1.f) {}
 
 
 
@@ -30,7 +32,7 @@ void solar::Camera::scale(const glm::vec3& v) {
 
 ///////////////////////////////////////////////////////////////////////////////
 void solar::Camera::resetTransforms() {
-    transformMatrix = glm::mat4();
+    transformMatrix = glm::mat4(1.f);
 }
 
 
@@ -45,7 +47,7 @@ glm::vec3 solar::Camera::getWorldPosition() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::mat4 solar::Camera::getProjMatrix() const {
-    return glm::perspective(glm::radians(47.f), static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
+    return glm::perspective(glm::radians(50.f), static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
 }
 
 
