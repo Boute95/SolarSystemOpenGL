@@ -138,7 +138,10 @@ void solar::SolarSphereBase::addColorTexture(const std::string& path) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereBase::draw() {
+void solar::SolarSphereBase::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) {
+    glManager->useShader("solarSphereShader");
+    glManager->setUniformValue("uProjMatrix", projMatrix);
+    glManager->setUniformValue("uViewMatrix", viewMatrix);
     glManager->setUniformValue("uUseTexture", 1);
     glManager->setUniformValue("uUseModelMatrix", 1);
     glManager->setUniformValue("uModelMatrix", transformMatrix);
@@ -151,4 +154,11 @@ void solar::SolarSphereBase::draw() {
 ///////////////////////////////////////////////////////////////////////////////
 const std::vector<glimac::ShapeVertex>& solar::SolarSphereBase::getVertices() {
     return vertices;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::SolarSphereBase::setShader(const std::string vs, const std::string fs) {
+    glManager->addShader("solarSphereShader", vs, fs);
 }

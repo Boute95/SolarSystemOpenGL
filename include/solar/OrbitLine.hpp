@@ -21,7 +21,7 @@ namespace solar {
 
     public:
         OrbitLine(glm::vec3 iColor, float iThickness, std::shared_ptr<SolarSphere>);
-        void draw() override;
+        void draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) override;
         const std::vector<glimac::ShapeVertex>& getVertices() override;
         void setGLManager(std::shared_ptr<GLManager>) override;
         virtual void setApoapsis(const double km) override;

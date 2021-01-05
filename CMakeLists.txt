@@ -25,6 +25,7 @@ target_sources(solarSystem
         src/RenderEngine.cpp
         src/PhysicsEngine.cpp
         src/GLManager.cpp
+        src/SkyBox.cpp
         src/SolarSphereBase.cpp
         src/SolarSphereDecorator.cpp
         src/Ring.cpp

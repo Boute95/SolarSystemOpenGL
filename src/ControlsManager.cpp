@@ -21,7 +21,6 @@ void solar::ControlsManager::update(SDL_Event& e, const glimac::SDLWindowManager
     } else if (e.type == SDL_MOUSEBUTTONDOWN) {
         if (e.button.button == SDL_BUTTON_WHEELDOWN) {
             camController.zoom(-1e8);
-            std::cout<<"ZOOOM"<<std::endl;
         } else if (e.button.button == SDL_BUTTON_WHEELUP) {
             camController.zoom(1e8);
         }

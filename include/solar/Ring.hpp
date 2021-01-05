@@ -21,7 +21,7 @@ namespace solar {
 
     public:
         Ring(const double innerRadiusInKm, const double outerRadiusInKm, std::shared_ptr<SolarSphere>);
-        void draw() override;
+        void draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) override;
         const std::vector<glimac::ShapeVertex>& getVertices() override;
         void setGLManager(std::shared_ptr<GLManager>) override;
         void addRingColorTexture(const std::string& path);

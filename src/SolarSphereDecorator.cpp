@@ -7,8 +7,8 @@ solar::SolarSphereDecorator::SolarSphereDecorator(std::shared_ptr<solar::SolarSp
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::SolarSphereDecorator::draw() {
-    base->draw();
+void solar::SolarSphereDecorator::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) {
+    base->draw(projMatrix, viewMatrix);
 }
 
 
@@ -23,6 +23,13 @@ const std::vector<glimac::ShapeVertex>& solar::SolarSphereDecorator::getVertices
 ///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereDecorator::setGLManager(std::shared_ptr<solar::GLManager> iManager) {
     base->setGLManager(iManager);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::SolarSphereDecorator::setShader(const std::string vs, const std::string fs) {
+    base->setShader(vs, fs);
 }
 
 

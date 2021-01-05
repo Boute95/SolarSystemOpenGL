@@ -14,9 +14,10 @@ namespace solar {
     public:
         SolarSphereDecorator(std::shared_ptr<SolarSphere> iSolarSphere);
         // Drawable
-        virtual void draw() override;
+        virtual void draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) override;
         virtual const std::vector<glimac::ShapeVertex>& getVertices() override;
         virtual void setGLManager(std::shared_ptr<GLManager>) override;
+        virtual void setShader(const std::string vs, const std::string fs) override;
         // Transformable
         virtual void translate(const glm::vec3&) override;
         virtual void rotate(const float angle, const glm::vec3& axis) override;

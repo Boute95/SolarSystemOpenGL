@@ -2,10 +2,8 @@
 #include <GL/glew.h>
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::RenderEngine::RenderEngine(const glimac::Program& p, glimac::SDLWindowManager& iWinManager, const Camera& iC) 
-    : windowManager(iWinManager), camera(iC) {
-    glManager = std::make_shared<GLManager>(p);
- }
+solar::RenderEngine::RenderEngine(glimac::SDLWindowManager& iWinManager, const Camera& iC) 
+    : windowManager(iWinManager), camera(iC), glManager(std::make_shared<GLManager>()) {}
 
 
 
@@ -29,13 +27,12 @@ void solar::RenderEngine::addLight(std::shared_ptr<LightSource> iLight) {
 void solar::RenderEngine::render() {
 
     glManager->bind();
-    glManager->setUniformValue("uProjMatrix", camera.getProjMatrix());
-    glManager->setUniformValue("uViewMatrix", camera.getViewMatrix());
     for (auto d : drawables) {
-        d->draw();
+        d->draw(camera.getProjMatrix(), camera.getViewMatrix());
     }
     windowManager.swapBuffers();
     glManager->unbind();
+    
 
 }
 

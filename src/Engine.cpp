@@ -5,6 +5,7 @@
 #include <solar/SolarSphereBase.hpp>
 #include <solar/Ring.hpp>
 #include <solar/OrbitLine.hpp>
+#include <solar/SkyBox.hpp>
 #include <glimac/SDLWindowManager.hpp>
 #include <iostream> // std::cout
 
@@ -30,29 +31,49 @@ void solar::Engine::start(char* appPathStr) {
 
     // Initializing program
     glimac::FilePath applicationPath(appPathStr);
-    glimac::FilePath vs = applicationPath.dirPath() + "../assets/shaders/SolarSphereObject.vs.glsl";
-    glimac::FilePath fs = applicationPath.dirPath() + "../assets/shaders/SolarSphereObject.fs.glsl";
-    std::cout << "Vertex Shader : " << vs << '\n'; 
-    std::cout << "Frag Shader : " << fs << std::endl;
-    glimac::Program program = glimac::loadProgram(vs, fs);
-    program.use();
+    glimac::FilePath solarObjectVS = applicationPath.dirPath() + "../assets/shaders/SolarSphereObject.vs.glsl";
+    glimac::FilePath solarObjectFS = applicationPath.dirPath() + "../assets/shaders/SolarSphereObject.fs.glsl";
+    glimac::FilePath skyboxVS = applicationPath.dirPath() + "../assets/shaders/SkyBox.vs.glsl";
+    glimac::FilePath skyboxFS = applicationPath.dirPath() + "../assets/shaders/SkyBox.fs.glsl";
+    std::cout << "Vertex Shader : " << solarObjectVS << '\n'; 
+    std::cout << "Frag Shader : " << solarObjectFS << std::endl;
 
     // Initializing Engines and controllers
     solar::CameraController cameraController(1920 / 1080.);
     solar::ControlsManager controlsManager;
-    RenderEngine renderEngine(program, winManager, cameraController.getCamera());
+    RenderEngine renderEngine(winManager, cameraController.getCamera());
     PhysicsEngine physicsEngine;
     physicsEngine.setHourPerSecond(100.);
 
+    // Setting up the skybox
+std::shared_ptr<SkyBox> skybox(std::make_shared<SkyBox>());
+    renderEngine.addObject(skybox);
+    skybox->addTextures({
+        "../assets/textures/skybox/right.bmp",
+        "../assets/textures/skybox/left.bmp",
+        "../assets/textures/skybox/top.bmp",
+        "../assets/textures/skybox/bottom.bmp",
+        "../assets/textures/skybox/front.bmp",
+        "../assets/textures/skybox/back.bmp"
+    });
+    skybox->setShader(skyboxVS, skyboxFS);    
+
     // Initializing solar objects
     initObjects(applicationPath, renderEngine, physicsEngine);
+    for (auto& o : solarObjects) {
+        o.second->setShader(solarObjectVS, solarObjectFS);
+    }
+
+    
 
     // Setting up the different views
     physicsEngine.simulate();
     View topView;
-    topView.setTrackball(glm::vec3(0.f), -2e9, 0., 60.);
+    topView.setTrackball(glm::vec3(0.f), -5e8, 0., 60.);
     cameraController.setView("topView", topView);
     cameraController.switchView("topView");
+
+    
 
     // Main loop
     bool done = false;
@@ -87,7 +108,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["sun"]->setRotationPeriod(25. * 24); // 25 days
     solarObjects["sun"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/sun.jpg");
 
-    solarObjects["mercure"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["mercure"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(2439.7 * 3000));
     solarObjects["mercure"]->setParent(solarObjects["sun"]);
     solarObjects["mercure"]->setApoapsis(69.8e6);
@@ -99,7 +120,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["mercure"]);
     solarObjects["mercure"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/mercure.jpg");
     
-    solarObjects["venus"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["venus"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(6051.8 * 2000));
     solarObjects["venus"]->setParent(solarObjects["sun"]);
     solarObjects["venus"]->setApoapsis(108.9e6);
@@ -111,7 +132,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["venus"]);
     solarObjects["venus"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/venus.jpg");
 
-    solarObjects["earth"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["earth"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(6378.137 * 2000));
     solarObjects["earth"]->setParent(solarObjects["sun"]);
     solarObjects["earth"]->setApoapsis(147.1e6);
@@ -123,7 +144,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["earth"]);
     solarObjects["earth"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/earth.jpg");
 
-    solarObjects["mars"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["mars"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(3389.5 * 2000));
     solarObjects["mars"]->setParent(solarObjects["sun"]);
     solarObjects["mars"]->setApoapsis(249.2e6);
@@ -135,7 +156,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["mars"]);
     solarObjects["mars"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/mars.jpg");
 
-    solarObjects["jupiter"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["jupiter"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(69911. * 1000));
     solarObjects["jupiter"]->setParent(solarObjects["sun"]);
     solarObjects["jupiter"]->setApoapsis(816.6e6);
@@ -149,7 +170,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
 
     double saturnRadius = 58232. * 1000;
     solarObjects["saturn"] = std::make_shared<Ring>(saturnRadius + 7000. * 1000, saturnRadius + 30000. * 1000,
-        std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+        std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
             std::make_shared<SolarSphereBase>(saturnRadius)));
     solarObjects["saturn"]->setParent(solarObjects["sun"]);
     solarObjects["saturn"]->setApoapsis(1514.5e6);
@@ -162,7 +183,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["saturn"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/saturn.jpg");
     dynamic_cast<Ring&>(*(solarObjects["saturn"])).addRingColorTexture(appPath.dirPath() + "../assets/textures/color/saturn_ring.jpg");
 
-    solarObjects["uranus"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["uranus"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(25559. * 1000));
     solarObjects["uranus"]->setParent(solarObjects["sun"]);
     solarObjects["uranus"]->setApoapsis(3003.6e6);
@@ -174,7 +195,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["uranus"]);
     solarObjects["uranus"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/uranus.jpg");
 
-    solarObjects["neptune"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["neptune"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(24622. * 1000));
     solarObjects["neptune"]->setParent(solarObjects["sun"]);
     solarObjects["neptune"]->setApoapsis(4545.7e6);
@@ -186,7 +207,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     physicsEngine.addObject(solarObjects["neptune"]);
     solarObjects["neptune"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/neptune.jpg");
 
-    solarObjects["pluto"] = std::make_shared<OrbitLine>(glm::vec3(1.f, 1.f, 1.f), 2.f,
+    solarObjects["pluto"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(1188.3 * 4000));
     solarObjects["pluto"]->setParent(solarObjects["sun"]);
     solarObjects["pluto"]->setApoapsis(7375.9e6);

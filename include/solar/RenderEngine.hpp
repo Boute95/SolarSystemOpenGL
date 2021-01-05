@@ -22,7 +22,7 @@ namespace solar {
         std::shared_ptr<GLManager> glManager;
 
     public:
-        RenderEngine(const glimac::Program& p, glimac::SDLWindowManager& iWinManager, const Camera& iC);
+        RenderEngine(glimac::SDLWindowManager& iWinManager, const Camera& iC);
         void addObject(std::shared_ptr<Drawable> iObj);
         void addLight(std::shared_ptr<LightSource> iLight);
         void render();

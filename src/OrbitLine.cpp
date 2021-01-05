@@ -9,15 +9,17 @@ solar::OrbitLine::OrbitLine(glm::vec3 iColor, float iThickness, std::shared_ptr<
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::OrbitLine::draw() {
-    SolarSphereDecorator::draw();
+void solar::OrbitLine::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) {
+    SolarSphereDecorator::draw(projMatrix, viewMatrix);
     glManager->setUniformValue("uUseTexture", 0);
     glManager->setUniformValue("uColor", color);
     glManager->setUniformValue("uUseModelMatrix", 0);
+    glManager->enableLine();
     glManager->setLineWidth(thickness);
     glManager->drawVertices(GL_LINE_STRIP, GLint(orbitVertices.size()));
     glManager->setUniformValue("uUseTexture", 1);
     glManager->setUniformValue("uUseModelMatrix", 1);
+    glManager->disableLine();
 }
 
 

@@ -32,8 +32,8 @@ std::vector<glimac::ShapeVertex> solar::Ring::getAnnulusVertices(const double in
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::Ring::draw() {
-    SolarSphereDecorator::draw();
+void solar::Ring::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix) {
+    SolarSphereDecorator::draw(projMatrix, viewMatrix);
     glManager->setActiveTexture("uColorTexture", ringColorTexture);
     glManager->drawVertices(GL_TRIANGLE_STRIP, GLint(ringVertices.size()));
 }

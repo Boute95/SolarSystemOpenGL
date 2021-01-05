@@ -52,7 +52,7 @@ glm::mat4 solar::Camera::getTransformMatrix() const {
 
 ///////////////////////////////////////////////////////////////////////////////
 glm::mat4 solar::Camera::getProjMatrix() const {
-    return glm::perspective(glm::radians(50.f), static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e11));
+    return glm::perspective(glm::radians(70.f), static_cast<float>(aspectRatio), static_cast<float>(1e5), static_cast<float>(1e12));
 }
 
 

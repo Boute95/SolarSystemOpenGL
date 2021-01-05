@@ -4,7 +4,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::GLManager::GLManager(const glimac::Program& p) : program(p) {
+solar::GLManager::GLManager() {
     glEnable(GL_DEPTH_TEST);
     // VBO
     glGenBuffers(1, &vbo);
@@ -47,8 +47,27 @@ void solar::GLManager::drawVertices(const GLenum mode, const GLint vertexCount) 
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::addShader(const std::string key, const std::string vs, const std::string fs) {
+    if (programs.count(key) == 0) {
+        programs[key] = glimac::loadProgram(vs, fs);
+    }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::useShader(const std::string key) {
+    if (activeProgram.compare(key) != 0) {
+        programs[key].use();
+        activeProgram = key;
+    }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::GLManager::addUniform(std::string id) {
-    GLint location = glGetUniformLocation(program.getGLId(), id.c_str());
+    GLint location = glGetUniformLocation(programs[activeProgram].getGLId(), id.c_str());
     uniforms[id] = location;
 }
 
@@ -67,6 +86,16 @@ void solar::GLManager::setUniformValue(std::string id, const GLint val) {
         addUniform(id);
     }
     glUniform1i(uniforms[id], val);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setUniformValue(std::string id, const float val) {
+    if (!hasUniform(id)) {
+        addUniform(id);
+    }
+    glUniform1f(uniforms[id], val);
 }
 
 
@@ -93,8 +122,21 @@ void solar::GLManager::setUniformValue(std::string id, const glm::mat4& iMat4) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::GLManager::setLineWidth(const float w) {
+void solar::GLManager::enableLine() {
     glEnable(GL_LINE_WIDTH);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::disableLine() {
+    glDisable(GL_LINE_WIDTH);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setLineWidth(const float w) {
     glLineWidth(w);
 }
 
@@ -115,11 +157,44 @@ GLuint solar::GLManager::addTexture(const std::unique_ptr<glimac::Image>& img) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-void solar::GLManager::setActiveTexture(const std::string& location, const GLuint id, const GLenum textureUnit) {
+GLuint solar::GLManager::addCubeMapTexture(const std::array<std::unique_ptr<glimac::Image>, 6>& images) {
+    GLuint id;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+    for (unsigned int i = 0 ; i < 6 ; i++) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, GLsizei(images[i]->getWidth()), GLsizei(images[i]->getHeight()), 0, GL_RGBA, GL_FLOAT, images[i]->getPixels());
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+    return id;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setActiveTexture(const std::string& location, const GLuint id, const GLenum textureUnit, const GLenum textureType) {
     activeTextures.insert(textureUnit);
     glActiveTexture(textureUnit);
-    glBindTexture(GL_TEXTURE_2D, id);
+    glBindTexture(textureType, id);
     setUniformValue(location, GLint(textureUnit - GL_TEXTURE0));
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::enableDepthWrite() {
+    glDepthMask(GL_TRUE);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::disableDepthWrite() {
+    glDepthMask(GL_FALSE);
 }
 
 
@@ -138,6 +213,7 @@ void solar::GLManager::unbind() {
     for (auto& texUnit : activeTextures) {
         glActiveTexture(texUnit);
         glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
     }
     glBindVertexArray(0);
 }
