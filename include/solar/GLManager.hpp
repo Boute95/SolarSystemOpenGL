@@ -32,10 +32,11 @@ namespace solar {
         bool hasUniform(std::string id) const;
         void setUniformValue(std::string id, const GLint);
         // void setUniformValue(std::string id, const glm::vec2&);
-        // void setUniformValue(std::string id, const glm::vec3&);
+        void setUniformValue(std::string id, const glm::vec3&);
         // void setUniformValue(std::string id, const glm::vec4&);
         // void setUniformValue(std::string id, const glm::mat3&);
         void setUniformValue(std::string id, const glm::mat4&);
+        void setLineWidth(const float w);
         GLuint addTexture(const std::unique_ptr<glimac::Image>& img);
         void setActiveTexture(const std::string& location, const GLuint id, const GLenum textureUnit = GL_TEXTURE0);
         void bind();

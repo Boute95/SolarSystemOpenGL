@@ -9,7 +9,8 @@ namespace solar {
     class Ring : public SolarSphereDecorator {
     
     private:
-        double inRadiusInKm;
+        double innerRadiusInKm;
+        double outerRadiusInKm;
         std::vector<glimac::ShapeVertex> allVertices;
         std::vector<glimac::ShapeVertex> ringVertices;
         std::shared_ptr<GLManager> glManager;

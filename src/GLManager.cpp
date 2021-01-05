@@ -72,11 +72,30 @@ void solar::GLManager::setUniformValue(std::string id, const GLint val) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setUniformValue(std::string id, const glm::vec3& v) {
+    if (!hasUniform(id)) {
+        addUniform(id);
+    }
+    glUniform3fv(uniforms[id], 1, glm::value_ptr(v));
+
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::GLManager::setUniformValue(std::string id, const glm::mat4& iMat4) {
     if (!hasUniform(id)) {
         addUniform(id);
     }
     glUniformMatrix4fv(uniforms[id], 1, GL_FALSE, glm::value_ptr(iMat4));
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+void solar::GLManager::setLineWidth(const float w) {
+    glEnable(GL_LINE_WIDTH);
+    glLineWidth(w);
 }
 
 

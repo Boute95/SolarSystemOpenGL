@@ -7,6 +7,7 @@ layout(location = 2) in vec3 aVertexNormal;
 layout(location = 3) in vec2 aVertexTexCoords;
 
 // Uniforms
+uniform int uUseModelMatrix;
 uniform mat4 uProjMatrix;
 uniform mat4 uViewMatrix;
 uniform mat4 uModelMatrix;
@@ -20,7 +21,12 @@ void main() {
     vec4 vertexPosition = vec4(aVertexPosition, 1);
     vec4 vertexNormal = vec4(aVertexNormal, 0);
 
-    mat4 MVMatrix =  uViewMatrix * uModelMatrix;
+    mat4 MVMatrix;
+    if (uUseModelMatrix == 0) {
+        MVMatrix = uViewMatrix;
+    } else {
+        MVMatrix =  uViewMatrix * uModelMatrix;
+    }
     mat4 MVPMatrix = uProjMatrix * MVMatrix;
     mat4 normalMatrix = transpose(inverse(MVMatrix));
     

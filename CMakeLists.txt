@@ -28,6 +28,7 @@ target_sources(solarSystem
         src/SolarSphereBase.cpp
         src/SolarSphereDecorator.cpp
         src/Ring.cpp
+        src/OrbitLine.cpp
         # src/Star.cpp
         src/Camera.cpp
         src/CameraController.cpp

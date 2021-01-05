@@ -103,7 +103,6 @@ void solar::SolarSphereBase::update(const double timeInHour) {
     double theta = fmod(timeInHour, orbitalPeriod) * 2 * M_PI / orbitalPeriod;
     double alpha = (apoapsis + periapsis) / 2;
     double r = (alpha * (1 - orbitalEccentricity * orbitalEccentricity)) / (1 + orbitalEccentricity * cos(theta));
-    // rotate(static_cast<float>(theta), glm::vec3(0.f, 0.f, 1.f));
     double x = r * cos(theta);
     double y = r * sin(theta);
     translate(glm::vec3(x, 0.f, y));
@@ -134,6 +133,8 @@ void solar::SolarSphereBase::addColorTexture(const std::string& path) {
 
 ///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereBase::draw() {
+    glManager->setUniformValue("uUseTexture", 1);
+    glManager->setUniformValue("uUseModelMatrix", 1);
     glManager->setUniformValue("uModelMatrix", transformMatrix);
     glManager->setActiveTexture("uColorTexture", colorTexture);
     glManager->drawVertices(GL_TRIANGLES, GLint(vertices.size()));

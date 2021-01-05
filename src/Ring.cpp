@@ -2,12 +2,8 @@
 #include <iostream>
 
 ///////////////////////////////////////////////////////////////////////////////
-solar::Ring::Ring(const double innerRadiusInKm, const double outerRadiusInKm, std::shared_ptr<solar::SolarSphere> iSolarSphere) 
-    : SolarSphereDecorator(iSolarSphere) {
-        ringVertices = getAnnulusVertices(innerRadiusInKm, outerRadiusInKm, 64);
-        allVertices.insert(allVertices.end(), SolarSphereDecorator::getVertices().begin(), SolarSphereDecorator::getVertices().end());
-        allVertices.insert(allVertices.end(), ringVertices.begin(), ringVertices.end());
-}
+solar::Ring::Ring(const double iInnerRadiusInKm, const double iOuterRadiusInKm, std::shared_ptr<solar::SolarSphere> iSolarSphere) 
+    : SolarSphereDecorator(iSolarSphere), innerRadiusInKm(iInnerRadiusInKm), outerRadiusInKm(iOuterRadiusInKm) {}
 
 
 
@@ -46,6 +42,11 @@ void solar::Ring::draw() {
 
 ///////////////////////////////////////////////////////////////////////////////
 const std::vector<glimac::ShapeVertex>& solar::Ring::getVertices() {
+    if (allVertices.size() == 0) {
+        ringVertices = getAnnulusVertices(innerRadiusInKm, outerRadiusInKm, 64);
+        allVertices.insert(allVertices.end(), SolarSphereDecorator::getVertices().begin(), SolarSphereDecorator::getVertices().end());
+        allVertices.insert(allVertices.end(), ringVertices.begin(), ringVertices.end());
+    }
     return allVertices;
 }
 
