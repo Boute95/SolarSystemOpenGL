@@ -42,6 +42,13 @@ void solar::SolarSphereDecorator::rotate(const float angle, const glm::vec3& axi
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::SolarSphereDecorator::rotate(const glm::quat& q) {
+    base->rotate(q);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereDecorator::scale(const glm::vec3& v) {
     base->scale(v);
 }
@@ -56,8 +63,8 @@ void solar::SolarSphereDecorator::resetTransforms() {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::vec3 solar::SolarSphereDecorator::getWorldPosition() const {
-    return base->getWorldPosition();
+glm::mat4 solar::SolarSphereDecorator::getTransformMatrix() const {
+    return base->getTransformMatrix();
 }
 
 

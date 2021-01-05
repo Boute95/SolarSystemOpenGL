@@ -13,6 +13,8 @@ namespace solar {
     private:
         Camera camera;
         std::map<std::string, View> views;
+        std::string currentView;
+        double totalZoom;
 
     public:
         CameraController(const double iAspectRatio);
@@ -20,6 +22,7 @@ namespace solar {
         void switchView(const std::string id);
         void rotateLeft(const double degrees);
         void rotateUp(const double degrees);
+        void zoom(const double iZoom);
         const Camera& getCamera() const;
     };
 

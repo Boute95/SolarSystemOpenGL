@@ -11,9 +11,10 @@ namespace solar {
         virtual ~Transformable() {}
         virtual void translate(const glm::vec3&) = 0;
         virtual void rotate(const float angle, const glm::vec3& axis) = 0;
+        virtual void rotate(const glm::quat&) = 0;
         virtual void scale(const glm::vec3&) = 0;
         virtual void resetTransforms() = 0;
-        virtual glm::vec3 getWorldPosition() const = 0;
+        virtual glm::mat4 getTransformMatrix() const = 0;
 
     };
 

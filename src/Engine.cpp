@@ -50,7 +50,7 @@ void solar::Engine::start(char* appPathStr) {
     // Setting up the different views
     physicsEngine.simulate();
     View topView;
-    topView.setTrackball(solarObjects["sun"]->getWorldPosition(), -2e9, 0., 60.);
+    topView.setTrackball(glm::vec3(0.f), -2e9, 0., 60.);
     cameraController.setView("topView", topView);
     cameraController.switchView("topView");
 

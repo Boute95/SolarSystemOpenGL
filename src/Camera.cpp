@@ -1,6 +1,5 @@
 #include <solar/Camera.hpp>
 #include <glimac/SDLWindowManager.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,6 +23,13 @@ void solar::Camera::rotate(const float angle, const glm::vec3& axis) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::Camera::rotate(const glm::quat& q) {
+    transformMatrix = transformMatrix * glm::toMat4(q);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::Camera::scale(const glm::vec3& v) {
     transformMatrix = glm::scale(transformMatrix, v);
 }
@@ -38,9 +44,8 @@ void solar::Camera::resetTransforms() {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::vec3 solar::Camera::getWorldPosition() const {
-    glm::vec4 v = transformMatrix * glm::vec4(0.f, 0.f, 0.f, 1.f);
-    return glm::vec3(v.x, v.y, v.z);
+glm::mat4 solar::Camera::getTransformMatrix() const {
+    return transformMatrix;
 }
 
 

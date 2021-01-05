@@ -27,6 +27,13 @@ void solar::SolarSphereBase::rotate(const float angle, const glm::vec3& axis) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+void solar::SolarSphereBase::rotate(const glm::quat& q) {
+    transformMatrix = transformMatrix * glm::toMat4(q);
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::SolarSphereBase::scale(const glm::vec3& v) {
     transformMatrix = glm::scale(transformMatrix, v);
 }
@@ -41,9 +48,8 @@ void solar::SolarSphereBase::resetTransforms() {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-glm::vec3 solar::SolarSphereBase::getWorldPosition() const {
-    glm::vec4 v = transformMatrix * glm::vec4(0.f, 0.f, 0.f, 1.f);
-    return glm::vec3(v.x, v.y, v.z);
+glm::mat4 solar::SolarSphereBase::getTransformMatrix() const {
+    return transformMatrix;
 }
 
 

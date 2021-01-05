@@ -17,12 +17,14 @@ namespace solar {
         virtual void draw() override;
         virtual const std::vector<glimac::ShapeVertex>& getVertices() override;
         virtual void setGLManager(std::shared_ptr<GLManager>) override;
-        // Simulable
+        // Transformable
         virtual void translate(const glm::vec3&) override;
         virtual void rotate(const float angle, const glm::vec3& axis) override;
+        virtual void rotate(const glm::quat&) override;
         virtual void scale(const glm::vec3&) override;
         virtual void resetTransforms() override;
-        virtual glm::vec3 getWorldPosition() const override;
+        virtual glm::mat4 getTransformMatrix() const override;
+        // Simulable
         virtual void setParent(std::shared_ptr<Transformable>) override;
         virtual void setApoapsis(const double km) override;
         virtual void setPeriapsis(const double km) override;
