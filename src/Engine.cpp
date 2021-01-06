@@ -72,10 +72,7 @@ void solar::Engine::start(char* appPathStr) {
     View sideView;
     sideView.setTrackball(glm::vec3(0.f), -5e8, 0., 0.);
     cameraController.setView("sideView", sideView);
-    cameraController.switchView("topView");
-
-
-    
+    cameraController.switchView("topView"); // Starting view
 
     // Main loop
     bool done = false;
@@ -185,8 +182,10 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["saturn"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/saturn.jpg");
     dynamic_cast<Ring&>(*(solarObjects["saturn"])).addRingColorTexture(appPath.dirPath() + "../assets/textures/color/saturn_ring.jpg");
 
-    solarObjects["uranus"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
-        std::make_shared<SolarSphereBase>(25559. * 1000));
+    double uranusRadius = 25559. * 1000;
+    solarObjects["uranus"] = std::make_shared<Ring>(uranusRadius + 38000. * 1000., 98000. * 1000.,
+        std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
+            std::make_shared<SolarSphereBase>(25559. * 1000)));
     solarObjects["uranus"]->setParent(solarObjects["sun"]);
     solarObjects["uranus"]->setApoapsis(3003.6e6);
     solarObjects["uranus"]->setPeriapsis(2741.3e6);
@@ -196,6 +195,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     renderEngine.addObject(solarObjects["uranus"]);
     physicsEngine.addObject(solarObjects["uranus"]);
     solarObjects["uranus"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/uranus.jpg");
+    dynamic_cast<Ring&>(*(solarObjects["uranus"])).addRingColorTexture(appPath.dirPath() + "../assets/textures/color/uranus_ring.jpg");
 
     solarObjects["neptune"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
         std::make_shared<SolarSphereBase>(24622. * 1000));
