@@ -21,6 +21,13 @@ void solar::PhysicsEngine::setHourPerSecond(const double h) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
+double solar::PhysicsEngine::getHourPerSecond() const {
+    return hourPerSecond;
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
 void solar::PhysicsEngine::simulate() {
     auto now = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsedSeconds = now - timeLastSimulate;

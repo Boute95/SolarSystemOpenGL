@@ -85,7 +85,7 @@ std::shared_ptr<SkyBox> skybox(std::make_shared<SkyBox>());
             if(e.type == SDL_QUIT) {
                 done = true; // Leave the loop after this iteration
             } else {
-                controlsManager.update(e, winManager, cameraController);
+                controlsManager.update(e, winManager, cameraController, physicsEngine);
             }
 
         }

@@ -20,6 +20,7 @@ namespace solar {
         PhysicsEngine();
         void addObject(std::shared_ptr<Simulable> o);
         void setHourPerSecond(const double h);
+        double getHourPerSecond() const;
         void simulate();
 
     };
