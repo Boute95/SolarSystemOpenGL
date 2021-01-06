@@ -1,0 +1,177 @@
+@startuml
+Camera ..|> Transformable
+CameraController --* "*" View
+CameraController --* "1" Camera
+ControlsManager --> CameraController
+ControlsManager --> PhysicsEngine
+Engine --* "*" SolarSphereBase
+Engine --* "1" SkyBox
+Engine --* "1" RenderEngine
+Engine --* "1" PhysicsEngine
+Engine --* "1" ControlsManager
+Engine --* "1" CameraController
+OrbitLine --|> SolarSphereDecorator
+PhysicsEngine ..* "*" Simulable
+RenderEngine ..* "*" Drawable
+RenderEngine ..* "*" LightSource
+RenderEngine <-- Camera : Sends Proj View Matrices
+Ring --|> SolarSphereDecorator
+Simulable --|> Transformable
+SkyBox ..|> Drawable
+SolarSphere ..|> Drawable
+SolarSphere ..|> Simulable
+SolarSphereBase ..|> SolarSphere
+SolarSphereDecorator ..|> SolarSphere
+
+
+interface Drawable {
+    +void draw(mat4 projMatrix, mat4 viewMatrix)
+    +ShapeVertex[] getVertices()
+    +void setGLManager(GLManager glM)
+    +void setShader(String vsPath, String fsPath)
+}
+
+interface Transformable {
+    +void translate(vec3)
+    +void rotate(double rad, vec3 axis)
+    +void rotate(quaternion)
+    +void scale(vec3)
+    +void resetTransforms()
+    +mat4 getTransformMatrix()
+}
+
+interface Simulable {
+    +void setParent(Transformable o)
+    +void setApoapsis(vec3 km)
+    +void setPeriapsis(vec3 km)
+    +void setOrbitalEccentricity(double e)
+    +void setOrbitalPeriod(float hours)
+    +void setRotationPeriod(float hours)
+    +void setOrbitalInclination(float degrees)
+    +void update(float timeInHour)
+}
+
+interface LightSource {
+    +vec3 getPosition()
+    +float getIntensity()
+    +vec3 getColor()
+}
+
+interface SolarSphere {
+    +void addColorTexture(String path)
+}
+
+class Camera {
+    +void setTarget(vec2 t)
+    +mat4 getViewMatrix()
+}
+
+class CameraController {
+    +CameraController(double aspectRatio)
+    +setView(String id, View v)
+    +switchView(String id)
+    +string getActiveView()
+    +void rotateLeft(double degree)
+    +void rotateUp(double degree)
+    +void zoom(double z)
+    +Camera getCamera()
+}
+
+class ControlsManager {
+    +update(SDL_Event e, SDLWindowManager w, CameraController camControl, PhysicsEngine p)
+}
+
+class Engine {
+    -SolarSphereObject solarObjects[]
+    -SkyBox skybox
+    +void start(String applicationPath)
+}
+
+class GLManager {
+    +void addVertices(ShapeVertex[] v)
+    +void drawVertices(GLenum mode, GLint vertexCount)
+    +void addShader(String key, String vsPath, String fsPath);
+    +void useShader(String key)
+    +void addUniform(String id)
+    +bool hasUniform(String id)
+    +void setUniformValue(String id, GLint);
+    +void setUniformValue(String id, float);
+    +void setUniformValue(String id, glm::vec3&);
+    +void setUniformValue(String id, glm::mat4&);
+    +void setLineWidth(float w);
+    +GLuint addTexture(Image img);
+    +GLuint addCubeMapTexture(Image[6] images);
+    +void setActiveTexture(String location, GLuint id, GLenum textureUnit, textureType);
+    +void enableLine();
+    +void disableLine();
+    +void enableDepthWrite();
+    +void disableDepthWrite();
+    +void bind();
+    +void unbind();
+    +void clear();
+}
+
+class OrbitLine {
+    +void draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix)
+    +ShapeVertex[] getVertices()
+    +void setGLManager(GLManager glM)
+    +void setApoapsis(vec3 km)
+    +void setPeriapsis(vec3 km)
+    +void setOrbitalEccentricity(double e)
+}
+
+class PhysicsEngine {
+    -Simulable objects[]
+    +void addObject(Simulable o)
+    +void setHourPerSecond(double h)
+    +double getHourPerSecond()
+    +void simulate()
+}
+
+class RenderEngine {
+    -Drawable objects[]
+    +RenderEngine(SDLWindowManager winManager, Camera c)
+    +void addObject(Drawable o)
+    +void addLight(LightSource l)
+    +void render()
+    +void clear()
+}
+
+class Ring {
+    +Ring(double innerRadius, double outerRadius, SolarSphere base)
+    +draw(mat4 projMatrix, mat4 viewMatrix)
+    +ShapeVertex[] getVertices()
+    +void setGLManager(GLManager glM)
+    +void addRingColorTexture(String path)
+    +void addRingTransparencyTexture(String path)
+}
+
+class SkyBox {
+    +draw(mat4 projMatrix, mat4 viewMatrix)
+    +ShapeVertex[] getVertices()
+    +void setGLManager(GLManager glM)
+    +void setShader(String vsPath, String fsPath)
+    +void addTextures(String[6] paths)
+}
+
+class SolarSphereBase {
+    +SolarSphereBase(double radiusInKm)
+}
+
+class SolarSphereDecorator {
+    +SolarSphereDecorator(SolarSphere base)
+}
+
+class View {
+    +void setTrackball(vec3 target, double distanceFromTarget, double angleX, double angleY)
+    +void setFree(vec3 target, vec3 position)
+    +bool isTrackball()
+    +vec3 getTarget()
+    +vec3 getPosition()
+    +double getDistanceFromTarget()
+    +double getAngleX()
+    +double getAngleY()
+}
+
+    
+@enduml

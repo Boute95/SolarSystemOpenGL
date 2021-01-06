@@ -9,7 +9,7 @@ void solar::SkyBox::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatri
     // Applying scale to make cube's sides farther than camera's near.
     glm::mat4 translationIndependentView = glm::scale(glm::mat4(glm::mat3(viewMatrix)), glm::vec3(1e6, 1e6, 1e6));
     glManager->setUniformValue("uViewMatrixSB", translationIndependentView);
-    glManager->setUniformValue("uLightnessFactor", 0.2f);
+    glManager->setUniformValue("uLightnessFactor", 0.3f);
     glManager->setActiveTexture("uCubeMapTexture", texture, GL_TEXTURE0, GL_TEXTURE_CUBE_MAP);
     glManager->drawVertices(GL_TRIANGLES, GLint(vertices.size()));
     glManager->enableDepthWrite();
