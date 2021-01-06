@@ -43,10 +43,10 @@ void solar::Engine::start(char* appPathStr) {
     solar::ControlsManager controlsManager;
     RenderEngine renderEngine(winManager, cameraController.getCamera());
     PhysicsEngine physicsEngine;
-    physicsEngine.setHourPerSecond(100.);
+    physicsEngine.setHourPerSecond(20.);
 
     // Setting up the skybox
-std::shared_ptr<SkyBox> skybox(std::make_shared<SkyBox>());
+    std::shared_ptr<SkyBox> skybox(std::make_shared<SkyBox>());
     renderEngine.addObject(skybox);
     skybox->addTextures({
         "../assets/textures/skybox/right.bmp",
@@ -64,14 +64,16 @@ std::shared_ptr<SkyBox> skybox(std::make_shared<SkyBox>());
         o.second->setShader(solarObjectVS, solarObjectFS);
     }
 
-    
-
     // Setting up the different views
     physicsEngine.simulate();
     View topView;
     topView.setTrackball(glm::vec3(0.f), -5e8, 0., 60.);
     cameraController.setView("topView", topView);
+    View sideView;
+    sideView.setTrackball(glm::vec3(0.f), -5e8, 0., 0.);
+    cameraController.setView("sideView", sideView);
     cameraController.switchView("topView");
+
 
     
 
@@ -208,7 +210,7 @@ void solar::Engine::initObjects(const glimac::FilePath& appPath, RenderEngine& r
     solarObjects["neptune"]->addColorTexture(appPath.dirPath() + "../assets/textures/color/neptune.jpg");
 
     solarObjects["pluto"] = std::make_shared<OrbitLine>(glm::vec3(0.75f, 0.8f, 0.8f), 1.f,
-        std::make_shared<SolarSphereBase>(1188.3 * 4000));
+        std::make_shared<SolarSphereBase>(1188.3 * 10000));
     solarObjects["pluto"]->setParent(solarObjects["sun"]);
     solarObjects["pluto"]->setApoapsis(7375.9e6);
     solarObjects["pluto"]->setPeriapsis(4436.8e6);

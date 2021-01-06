@@ -1,4 +1,5 @@
 #include <solar/PhysicsEngine.hpp>
+#include <iostream>
 
 ///////////////////////////////////////////////////////////////////////////////
 solar::PhysicsEngine::PhysicsEngine() : hourPerSecond(1) {}

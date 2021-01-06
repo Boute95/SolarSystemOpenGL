@@ -28,11 +28,27 @@ void solar::ControlsManager::update(SDL_Event& e, const glimac::SDLWindowManager
     }
 
     else if (e.type == SDL_KEYDOWN) {
+
         if (e.key.keysym.sym == SDLK_RIGHT) {
-            physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() + 5);
+            if (e.key.keysym.mod & KMOD_CTRL) {
+                physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() + 100);
+            }
+            physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() + 10);
         } else if (e.key.keysym.sym == SDLK_LEFT) {
-            physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() - 5);
+            if (e.key.keysym.mod & KMOD_CTRL) {
+                physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() - 100);
+            }
+            physicsEngine.setHourPerSecond(physicsEngine.getHourPerSecond() - 10);
         }
+
+        else if (e.key.keysym.sym == SDLK_SPACE) {
+            if (!camController.getCurrentView().compare("topView")) {
+                camController.switchView("sideView");
+            } else {
+                camController.switchView("topView");
+            }
+        }
+
     }
 
 }

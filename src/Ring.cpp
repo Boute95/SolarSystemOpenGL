@@ -43,7 +43,7 @@ void solar::Ring::draw(const glm::mat4& projMatrix, const glm::mat4& viewMatrix)
 ///////////////////////////////////////////////////////////////////////////////
 const std::vector<glimac::ShapeVertex>& solar::Ring::getVertices() {
     if (allVertices.size() == 0) {
-        ringVertices = getAnnulusVertices(innerRadiusInKm, outerRadiusInKm, 64);
+        ringVertices = getAnnulusVertices(innerRadiusInKm, outerRadiusInKm, 128);
         allVertices.insert(allVertices.end(), SolarSphereDecorator::getVertices().begin(), SolarSphereDecorator::getVertices().end());
         allVertices.insert(allVertices.end(), ringVertices.begin(), ringVertices.end());
     }

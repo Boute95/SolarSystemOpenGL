@@ -24,6 +24,7 @@ void solar::CameraController::switchView(const std::string id) {
         return;
     }
     currentView = id;
+    totalZoom = 0;
     if(views[id].isTrackball()) {
         camera.resetTransforms();
         camera.translate(views[id].getTarget());
@@ -33,6 +34,13 @@ void solar::CameraController::switchView(const std::string id) {
     } else {
         std::cout << "In solar::CameraController::switchView() : Free view is not implemented yet" << std::endl;
     }
+}
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+std::string solar::CameraController::getCurrentView() const {
+    return currentView;
 }
 
 
