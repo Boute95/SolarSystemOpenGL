@@ -8,6 +8,11 @@ cmake ..
 make
 ./solarSystem
 ```
+
+- **Right click** to orient the camera
+- **Mouse wheel** to zoom
+- **Space bar** to switch between different views
+- **Left Arrow** and **Right arrow** to change time acceleration
 ## Architecture
 ### Global Architecture
 The engine is the heart of the application. It owns the program main loop and the different main blocks of it :
