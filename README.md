@@ -1,5 +1,13 @@
 # SolarSystemOpenGL
 
+## Usage
+```
+mkdir build
+cd build
+cmake ..
+make
+./solarSystem
+```
 ## Architecture
 ### Global Architecture
 The engine is the heart of the application. It owns the program main loop and the different main blocks of it :
@@ -13,15 +21,15 @@ The engine is the heart of the application. It owns the program main loop and th
 ![Global Architecture](http://www.plantuml.com/plantuml/png/SoWkIImgAStDuNBDIy_CIrNGrTLIK39KKWXApKj9BO88eii5P5GMPoONOvTqpiyhAShFAVPDp4jCJot2a4xCJIrAX2hAGPFNKb88piz9B0eko4WjmZ0vEBlIAR-22mYISnABYnMWqjMr43xKoMYYCCUY2MEu0ow3vW641BBJu89GHu7u3a3hWG490000)
 
 ### The Control Manager
-The ControlManager makes actions at each main loop iteration according to user input. It tells the PhysicsEngine to change the time or the CameraController to change camera orientation or zoom.
+The ControlManager send1 actions at each main loop iteration according to user input. It tells the PhysicsEngine to change the time or the CameraController to change camera orientation or zoom.
 
-![ControlsManager](http://www.plantuml.com/plantuml/png/RP5D2i8m48NtESNGPMaBRbr8iRWKn9vWY4CRp8yayQUATpTYA3NjSjutyoPvKpkFrb-LP3lT2KrGbZbagmoEf4zaVsBA3ltW17VBi37QMoFT7ZLsP6SO5LcCJJBXUGQjaMZRIqzsvjoUXwrvi6H1m9kPAwoXwL5tvE0cw5x0qnXLL5MrEFttdyce5ue0EQVWY5uOpHZZ4fs3sFfwnpgcbQZHDvNJnuuapMu4qrH6CURnhUkmFjpm0m00)
+![ControlsManager](http://www.plantuml.com/plantuml/png/RP112i8m44NtESNGfRG1jowaK5mANc68Gnf89f29YeftDz2AcdQP_zuFd-abOygNuDM1hME2hjj0istWDDx56PdI6WwHSufUZiXeAIqm1aeuIxxmoY_YVY713eOHsPB0rT6jXKUCeTLQhxN_v_rKimi4Q0nvIfXTPAMKyIW2i_fyJU_F3tLSp_gIUaO1FV6vtEuD)
 
 ### Interfaces used by the RenderEngine and PhysicsEngine
 -The RenderEngine stores a list of `Drawable` and render at each iteration by calling their draw() method. This takes the projection matrix and the view matrix from the `RenderEngine`.
 -On the other hand, the `PhysicsEngine` stores a list of `Simulable`. It has methods to set its orbit informations. A `Simulable` is also a `Transformable`, having methods to translate, rotate, scale and getting its transform matrix. At each iteration, the `PhysicsEngine` calls the `Simulable`'s `update()` method taking the current time as parameter, moving correctly the object in function of its orbit.
 
-![Interfaces](http://www.plantuml.com/plantuml/png/VLHDRzD04BtxLwnoSafQ2S6vAXyLL6f4L2CkYCDqFR67hdVDx3XD5FBViHrZDXlJd3pllNdZUT7unWkmD9L9Rcr15jNbvOMQlPwf1xGvyX6CkLMvywJzDFd1MM5d_18i5CXdD5J8C8XCn5_CLEOCS5QNo6VEsTFklTicqO2MlZvpdH95htrIgQkhOJnLZO57WyaOG4X_P7Z-FtjFHIcPQrXZCXgretzVgwyCrgyTLtrtGbQGrw1nT5JxHBM_Lnj7kSfRCAr0tggQtSyb2DDseNfWG_Xy1ER7Xgo46hyX2sw__r05IlTC6dqw3nmzogVx8OnqV5A5MKQgrYvl9PamsK9j_0gaNAYXNFVbF3a46mIhnMj8nnWGJ3UetuI3s4a7vwxfUXZoXUea2hRa9tI_6X1aIyw6fDTW9gpHeuplDARGXrS4p374D5hctz-sFyrb1OnMqjDbNHJUkzf1xScd_J9FLKIlaEab_Wi_ae2vrHgjC6cItT-8S5hQEReyNHi7eahNi8zq3rs0vEovSDhmpcf3jcyPn3aMZ7WYR-eS10TUgC8x-xcrxAFK1hnNms7i3qCzdak8ZWSPmV4n1qnqrICHV3L6SFXUTFLDExwfp1y0)
+![Interfaces](http://www.plantuml.com/plantuml/png/ZLF1RjD04BtxAqOvEIMjXE1S5K45bHeHDOWBuZ1TJvo1zMwO7QUfIl-TjRDOpc8GFktCU_DstxFcAYYAjeqjhbtDZk3y_0ncBsTmHwuYEJPpRBLz36p2DFZMEnLlmn8TrYH_mDYGO2BPY6VyIBpyBrBsYfCABYxYRMSpM7FJMhotL1pzPF0xmOU_exTSRtNjMp5K34Bnwf-Ny4dGXOsNffyks2d91WqDYl1KGFnUx3rNKCLcsQ2-XftuRqjKuSC2-iQUwU7Oc1y7rblSqMSIfSENhr2JTcSs5ChvI36GlhzDOPJ32Mgxp5XHhegKjGgx6lPXXRfTG2etVJaldiSEHjOo6zeX5fNAFPbNuul4QzUkVDlD25OBw2Y01muJl1yjAebZxyPWC6Wdf2cG3cyQKkZ3gqV8CSGoCvD-MsOaaAvGo6bvQjPduRtPUTm53lsZu7kJmIiI_XV-KUvPqLuRGqw53UlZxuXecjef-ghSM8yAMzzAo7XtNO3itIHnGl366Skk7qdaYceXEg6tkmgL4gxSq8tx42NxA8t5420jnjDpgjEwPDsqWdaxN-OHacrr1AwYSjlONm00)
 
 ### The SolarSphere using the Decorator pattern
 As we said, the `Engine` owns all the `SolarObject`s. The `RenderEngine` uses `Drawable`s and the `PhysicsEngine` uses `Simulable`s. Thus, the `SolarObject` naturally implements the `Drawable` and `Simulable` interfaces.
